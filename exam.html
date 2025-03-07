@@ -4,36 +4,177 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Final Exam - Software Development Reviewer</title>
-    <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .navbar {
-            position: static;
-        }
-        .student-info {
-            color: white;
-            padding: 0.5rem 1rem;
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-        
-        .question {
-            background: white;
-            padding: 2.5rem;
-            border-radius: 12px;
-            margin: 2rem 0;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        :root {
+            --primary-color: #4169E1;
+            --secondary-color: #E8EAF6;
+            --text-color: #333;
+            --background-color: #F5F7FF;
         }
 
-        .question h4 {
-            font-size: 1.25rem;
-            margin-bottom: 2rem;
-            color: #1f2937;
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--background-color);
+            color: var(--text-color);
             line-height: 1.6;
-            font-weight: 500;
         }
 
+        .exam-section {
+            border-radius: 20px;
+            width: 90%;
+            margin: 0 auto;
+            padding: 0;
+            min-height: 100vh;
+            background: white;
+            position: relative;
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        }
+
+        .exam-header {
+            background: var(--primary-color);
+            color: white;
+            padding: 2rem 1.5rem;
+            border-radius: 0 0 30px 30px;
+            margin-bottom: 1.5rem;
+            position: relative;
+            text-align: center;
+        }
+
+        .exam-header h3 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .exam-header .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-top: 0.5rem;
+        }
+
+        .timer-display {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            margin-top: 1rem;
+            display: inline-block;
+        }
+
+        .question-container {
+            padding: 1.5rem;
+        }
+
+        .question-number {
+            color: var(--text-color);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            text-align: right;
+        }
+
+        .question-type {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .identification-input {
+            width: 100%;
+            padding: 1rem 0;
+            text-align: center;
+            border: 2px solid #E0E0E0;
+            border-radius: 12px;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .identification-input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.1);
+        }
+
+        .hint-btn {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .hint-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .hint-container {
+            display: none;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--secondary-color);
+            border-radius: 12px;
+            font-size: 0.9rem;
+            color: var(--text-color);
+        }        
+
+        .nav-buttons {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            background: white;
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .prev-btn {
+            background: var(--secondary-color);
+            color: var(--text-color);
+        }
+
+        .next-btn {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Multiple Choice Styles */
         .options {
             display: flex;
             flex-direction: column;
@@ -41,297 +182,115 @@
         }
 
         .option {
-            padding: 1.25rem;
-            background-color: #f8fafc;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
+            padding: 1rem;
+            background: var(--secondary-color);
+            border: 2px solid transparent;
+            border-radius: 12px;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            font-size: 1.1rem;
+            gap: 1rem;
         }
 
         .option:hover {
-            border-color: #2563eb;
-            background-color: #eff6ff;
+            border-color: var(--primary-color);
             transform: translateX(8px);
         }
 
         .option.selected {
-            background-color: #2563eb;
+            background: var(--primary-color);
             color: white;
-            border-color: #2563eb;
-            font-weight: 500;
         }
 
         .option-letter {
-            font-weight: bold;
-            margin-right: 1rem;
-            min-width: 28px;
-            height: 28px;
+            width: 30px;
+            height: 30px;
             background: rgba(255, 255, 255, 0.2);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.9rem;
+            font-weight: 600;
         }
 
-        .identification-input {
-            width: 100%;
-            padding: 1rem;
-            font-size: 1.1rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            margin: 1rem 0;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-        }
-
-        .identification-input:focus {
-            outline: none;
-            border-color: #2563eb;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        .hint-btn {
-            padding: 0.75rem 1.5rem;
-            background: none;
-            border: 2px solid #2563eb;
-            color: #2563eb;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+        /* True/False Styles */
+        .true-false-options {
             display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-weight: 500;
+            gap: 1rem;
             margin-top: 1rem;
         }
 
-        .hint-btn:hover {
-            background-color: #2563eb;
-            color: white;
-        }
-
-        .true-false-options {
-            display: flex;
-            gap: 1.5rem;
-            justify-content: center;
-            margin-top: 2rem;
-        }
-
-        .true-false-options .option {
-            min-width: 180px;
-            justify-content: center;
-            font-weight: 500;
-            font-size: 1.2rem;
-            padding: 1.5rem;
-        }
-
-        .question-type {
-            display: inline-block;
-            padding: 0.5rem 1.25rem;
-            background-color: #2563eb;
-            color: white;
-            border-radius: 6px;
-            margin-bottom: 1.5rem;
-            font-weight: 500;
-            font-size: 0.95rem;
-            letter-spacing: 0.5px;
-        }
-
-        .exam-controls {
-            display: flex;
-            justify-content: space-between;
-            gap: 1rem;
-            margin-top: 2rem;
-            padding: 1.5rem;
-            background: white;
+        .true-false-option {
+            flex: 1;
+            padding: 1rem;
+            text-align: center;
+            background: var(--secondary-color);
+            border: 2px solid transparent;
             border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            bottom: 2rem;
-        }
-
-        .exam-btn {
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 8px;
             cursor: pointer;
-            font-size: 1.1rem;
-            font-weight: 500;
             transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            min-width: 140px;
-            justify-content: center;
         }
 
-        .exam-btn:not(:disabled):hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        .true-false-option:hover {
+            border-color: var(--primary-color);
         }
 
-        #exam-prev-btn {
-            background-color: #f3f4f6;
-            color: #4b5563;
-        }
-
-        #exam-next-btn, #exam-submit-btn {
-            background-color: #2563eb;
+        .true-false-option.selected {
+            background: var(--primary-color);
             color: white;
         }
 
-        #exam-submit-btn {
-            background-color: #059669;
-        }
+        @media (max-width: 480px) {
+            .exam-section {
+                max-width: 100%;
+                box-shadow: none;
+            }
 
-        .exam-header {
-            background: white;
-            padding: 1.5rem 2rem;
-            border-radius: 12px;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 1rem;
-            z-index: 10;
-        }
+            .exam-header {
+                border-radius: 0 0 25px 25px;
+            }
 
-        #exam-timer {
-            font-size: 1.25rem;
-            font-weight: bold;
-            color: #2563eb;
-        }
-
-        .progress-container {
-            width: 100%;
-            background-color: #e5e7eb;
-            height: 8px;
-            border-radius: 999px;
-            margin: 1rem 0;
-            overflow: hidden;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background-color: #2563eb;
-            transition: width 0.3s ease;
-        }
-
-        .status.failed {
-            background-color: #ef4444;
-            color: white;
-        }
-
-        /* Responsive Styles */
-        @media (max-width: 768px) {
-            .question {
-                padding: 1.5rem;
+            .question-container {
+                padding: 1rem;
             }
 
             .true-false-options {
                 flex-direction: column;
             }
-
-            .true-false-options .option {
-                width: 100%;
-                min-width: unset;
-            }
-
-            .exam-controls {
-                flex-direction: column;
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                border-radius: 12px 12px 0 0;
-                margin: 0;
-            }
-
-            .exam-btn {
-                width: 100%;
-            }
-
-            main {
-                padding-bottom: 200px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .question h4 {
-                font-size: 1.1rem;
-            }
-
-            .option {
-                padding: 1rem;
-                font-size: 1rem;
-            }
-
-            .exam-header {
-                padding: 1rem;
-            }
-
-            #exam-timer {
-                font-size: 1.1rem;
-            }
-        }
-
-        .explanation {
-            margin-top: 1rem;
-            padding: 1rem;
-            background-color: var(--background-color);
-            border-radius: 8px;
-            border-left: 4px solid var(--primary-color);
-            font-style: italic;
-            color: var(--text-color);
-        }
-
-        .hint-container {
-            display: none;
-            margin-top: 1rem;
-            padding: 1rem;
-            background-color: #f8fafc;
-            border-radius: 8px;
-            border-left: 4px solid #2563eb;
-            color: #4b5563;
-            font-style: italic;
         }
     </style>
 </head>
 <body>
 
     <main>
-        <section class="final-exam exam-section">
-            <div class="final-exam-container">
-                <div id="exam-content">
-                    <div class="exam-header">
-                        <div class="exam-info">
-                            <h3>Software Development EXAM</h3>
-                            <h3 id="exam-progress">Question 1 of 100</h3>
-                            <div id="exam-timer">Time Remaining: 120:00</div>
-                        </div>
-                    </div>
-                    <div class="progress-container">
-                        <div class="progress-bar" id="progress-bar"></div>
-                    </div>
-                    <div id="exam-question-container">
-                        <!-- Questions will be loaded here -->
-                    </div>
-                    <div class="exam-controls">
-                        <button id="exam-prev-btn" class="exam-btn" disabled>
-                            <i class="fas fa-arrow-left"></i> Previous
-                        </button>
-                        <button id="exam-next-btn" class="exam-btn">
-                            Next <i class="fas fa-arrow-right"></i>
-                        </button>
-                        <button id="exam-submit-btn" class="exam-btn" style="display: none;">
-                            Submit Exam <i class="fas fa-check"></i>
-                        </button>
-                    </div>
-                </div>
+    <div class="exam-header">
+                <h3>Software Development</h3>
+                <div class="subtitle">PRELIMINARY</div>
+                <div class="timer-display" id="exam-timer">Time Remaining: 120:00</div>
+            </div>
+        <section class="exam-section">
+            
+
+            <div class="question-container" id="exam-question-container">
+                <!-- Questions will be dynamically loaded here -->
+            </div>
+
+            <div class="progress-circle" style="display: none;">
+                <div class="progress"></div>
+                <div class="progress-inner">1%</div>
+            </div>
+
+            <div class="nav-buttons">
+                <button id="exam-prev-btn" class="nav-btn prev-btn" disabled>
+                    <i class="fas fa-arrow-left"></i> Previous
+                </button>
+                <button id="exam-next-btn" class="nav-btn next-btn">
+                    Next <i class="fas fa-arrow-right"></i>
+                </button>
+                <button id="exam-submit-btn" class="nav-btn submit-btn" style="display: none; background: #059669; color: white;">
+                    Submit <i class="fas fa-check"></i>
+                </button>
             </div>
         </section>
     </main>
@@ -1304,18 +1263,17 @@
         function displayQuestion() {
             const question = examState.questions[examState.currentQuestion];
             const container = document.getElementById('exam-question-container');
-
-            // Update progress
-            document.getElementById('exam-progress').textContent = 
-                `Question ${examState.currentQuestion + 1} of ${examState.questions.length}`;
+            const progress = ((examState.currentQuestion + 1) / examState.questions.length) * 100;
 
             let html = `
-                <div class="question">
-                    <div class="question-type">
-                        ${question.type === 'multiple-choice' ? 'Multiple Choice' : 
-                          question.type === 'identification' ? 'Identification' : 'True or False'}
-                    </div>
-                    <h4>${question.question}</h4>
+                <div class="question-number">
+                    ${examState.currentQuestion + 1} of ${examState.questions.length}
+                </div>
+                <div class="question-type">
+                    ${question.type === 'multiple-choice' ? 'MULTIPLE CHOICE' : 
+                      question.type === 'identification' ? 'IDENTIFICATION' : 'TRUE OR FALSE'}
+                </div>
+                <div class="question-text">${question.question}</div>
             `;
 
             if (question.type === 'multiple-choice') {
@@ -1326,7 +1284,8 @@
                     html += `
                         <div class="option ${isSelected ? 'selected' : ''}" 
                              onclick="selectOption(${index})">
-                            <span class="option-letter">${letter}</span> ${option}
+                            <span class="option-letter">${letter}</span>
+                            ${option}
                         </div>
                     `;
                 });
@@ -1340,28 +1299,33 @@
                            value="${userAnswer}"
                            onchange="updateIdentificationAnswer(event)">
                     <button class="hint-btn" onclick="toggleHint()">
-                        <i class="fas fa-lightbulb"></i> Show Hint
+                        <i class="fas fa-lightbulb"></i> HINT
                     </button>
-                    <div class="hint-container" style="display: none;">
+                    <div class="hint-container">
                         <i class="fas fa-lightbulb"></i> ${question.hint}
                     </div>
                 `;
             } else { // True/False
-                html += '<div class="options true-false-options">';
-                ['True', 'False'].forEach((option, index) => {
-                    const isSelected = examState.userAnswers[examState.currentQuestion] === (index === 0);
-                    html += `
-                        <div class="option ${isSelected ? 'selected' : ''}" 
-                             onclick="selectTrueFalse(${index === 0})">
-                            ${option}
+                html += `
+                    <div class="true-false-options">
+                        <div class="true-false-option ${examState.userAnswers[examState.currentQuestion] === true ? 'selected' : ''}"
+                             onclick="selectTrueFalse(true)">
+                            True
                         </div>
-                    `;
-                });
-                html += '</div>';
+                        <div class="true-false-option ${examState.userAnswers[examState.currentQuestion] === false ? 'selected' : ''}"
+                             onclick="selectTrueFalse(false)">
+                            False
+                        </div>
+                    </div>
+                `;
             }
 
-            html += '</div>';
             container.innerHTML = html;
+
+            // Update progress circle
+            document.querySelector('.progress').style.background = 
+                `conic-gradient(var(--primary-color) ${progress}%, #E0E0E0 0)`;
+            document.querySelector('.progress-inner').textContent = `${Math.round(progress)}%`;
 
             // Focus on input for identification questions
             if (question.type === 'identification') {
@@ -1369,7 +1333,6 @@
             }
 
             updateControls();
-            updateProgress();
         }
 
         function selectOption(index) {
@@ -1391,7 +1354,7 @@
             const hintBtn = document.querySelector('.hint-btn');
             if (hintContainer.style.display === 'block') {
                 hintContainer.style.display = 'none';
-                hintBtn.innerHTML = '<i class="fas fa-lightbulb"></i> Show Hint';
+                hintBtn.innerHTML = '<i class="fas fa-lightbulb"></i> HINT';
             } else {
                 hintContainer.style.display = 'block';
                 hintBtn.innerHTML = '<i class="fas fa-lightbulb"></i> Hide Hint';
@@ -1403,13 +1366,15 @@
             const nextBtn = document.getElementById('exam-next-btn');
             const submitBtn = document.getElementById('exam-submit-btn');
 
+            // Update previous button state
             prevBtn.disabled = examState.currentQuestion === 0;
             
+            // Update next/submit button visibility
             if (examState.currentQuestion === examState.questions.length - 1) {
                 nextBtn.style.display = 'none';
-                submitBtn.style.display = 'block';
+                submitBtn.style.display = 'flex';
             } else {
-                nextBtn.style.display = 'block';
+                nextBtn.style.display = 'flex';
                 submitBtn.style.display = 'none';
             }
         }
@@ -1496,7 +1461,7 @@
                 </div>
             `;
 
-            document.querySelector('.exam-controls').style.display = 'none';
+            document.querySelector('.nav-buttons').style.display = 'none';
             
             // Save results to localStorage
             localStorage.setItem('examResults', JSON.stringify({
@@ -1570,11 +1535,6 @@
             `;
 
             container.innerHTML = html;
-        }
-
-        function updateProgress() {
-            const progress = ((examState.currentQuestion + 1) / examState.questions.length) * 100;
-            document.getElementById('progress-bar').style.width = `${progress}%`;
         }
 
         // Initialize exam when page loads
