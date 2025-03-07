@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Software Development Reviewer</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <h1>SoftDev Reviewer</h1>
+        </div>
+        <div class="menu-toggle" id="mobile-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#home" class="active">Home</a></li>
+            <li><a href="#materials">Review Materials</a></li>
+            <li><a href="#quizzes">Quizzes</a></li>
+            <li><a href="#final-exam">Final Exam</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <h1>Master Software Development</h1>
+                <p>Interactive learning materials and quizzes to help you excel</p>
+                <button class="cta-button" onclick="location.href='#materials'">Start Learning</button>
+            </div>
+        </section>
+
+        <section id="materials" class="materials">
+            <h2>Review Materials</h2>
+            <div class="materials-grid">
+                <div class="material-card">
+                    <div class="card-header">
+                        <i class="fas fa-book"></i>
+                        <h3>Introduction to Software Development</h3>
+                    </div>
+                    <p>Learn the fundamentals and basic concepts of software development.</p>
+                    <button onclick="openMaterial(1)">Study Now</button>
+                </div>
+                <div class="material-card">
+                    <div class="card-header">
+                        <i class="fas fa-code-branch"></i>
+                        <h3>Evolution of Software Development</h3>
+                    </div>
+                    <p>Explore the history, phases, and future trends in software development.</p>
+                    <button onclick="openMaterial(2)">Study Now</button>
+                </div>
+                <div class="material-card">
+                    <div class="card-header">
+                        <i class="fas fa-laptop-code"></i>
+                        <h3>Types of Software Development</h3>
+                    </div>
+                    <p>Discover different types and approaches in software development.</p>
+                    <button onclick="openMaterial(3)">Study Now</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="quizzes" class="quizzes">
+            <h2>Test Your Knowledge</h2>
+            <div class="quiz-container">
+                <div id="quiz-content">
+                    <div class="quiz-header">
+                        <h3 id="quiz-title">Select a Quiz to Begin</h3>
+                        <span id="quiz-progress"></span>
+                    </div>
+                    <div id="question-container">
+                        <!-- Questions will be loaded here -->
+                    </div>
+                    <div class="quiz-controls">
+                        <button id="prev-btn" class="quiz-btn" disabled>Previous</button>
+                        <button id="next-btn" class="quiz-btn">Next</button>
+                        <button id="submit-btn" class="quiz-btn" style="display: none;">Submit Quiz</button>
+                    </div>
+                </div>
+                <div class="quiz-selection">
+                    <button onclick="startQuiz(1)">Quiz 1: Introduction</button>
+                    <button onclick="startQuiz(2)">Quiz 2: Evolution</button>
+                    <button onclick="startQuiz(3)">Quiz 3: Types</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="final-exam" class="final-exam exam-section">
+            <h2>Final Comprehensive Exam</h2>
+            <div class="final-exam-container">
+                <div class="exam-intro" id="exam-intro">
+                    <h3>Software Development Comprehensive Exam</h3>
+                    <p>This exam consists of 100 questions covering all topics in software development.</p>
+                    <p>Time Limit: 120 minutes</p>
+                    <div class="exam-stats">
+                        <div class="stat">
+                            <span>Questions</span>
+                            <strong>100</strong>
+                        </div>
+                        <div class="stat">
+                            <span>Time</span>
+                            <strong>120 min</strong>
+                        </div>
+                        <div class="stat">
+                            <span>Passing</span>
+                            <strong>75%</strong>
+                        </div>
+                    </div>
+                    <button class="exam-btn" onclick="window.location.href='exam.html'">Register for Final Exam</button>
+                </div>
+            </div>
+        </section>
+
+        
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jirwen Palaje Reviewer. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/quiz.js"></script>
+    <script src="js/final-exam.js"></script>
+</body>
+</html> 

@@ -1,0 +1,1598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Exam - Software Development Reviewer</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .navbar {
+            position: static;
+        }
+        .student-info {
+            color: white;
+            padding: 0.5rem 1rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .question {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .question h4 {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            color: #1f2937;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .option {
+            padding: 1.25rem;
+            background-color: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            font-size: 1.1rem;
+        }
+
+        .option:hover {
+            border-color: #2563eb;
+            background-color: #eff6ff;
+            transform: translateX(8px);
+        }
+
+        .option.selected {
+            background-color: #2563eb;
+            color: white;
+            border-color: #2563eb;
+            font-weight: 500;
+        }
+
+        .option-letter {
+            font-weight: bold;
+            margin-right: 1rem;
+            min-width: 28px;
+            height: 28px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .identification-input {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            margin: 1rem 0;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .identification-input:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .hint-btn {
+            padding: 0.75rem 1.5rem;
+            background: none;
+            border: 2px solid #2563eb;
+            color: #2563eb;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            margin-top: 1rem;
+        }
+
+        .hint-btn:hover {
+            background-color: #2563eb;
+            color: white;
+        }
+
+        .true-false-options {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .true-false-options .option {
+            min-width: 180px;
+            justify-content: center;
+            font-weight: 500;
+            font-size: 1.2rem;
+            padding: 1.5rem;
+        }
+
+        .question-type {
+            display: inline-block;
+            padding: 0.5rem 1.25rem;
+            background-color: #2563eb;
+            color: white;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+        }
+
+        .exam-controls {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            bottom: 2rem;
+        }
+
+        .exam-btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-width: 140px;
+            justify-content: center;
+        }
+
+        .exam-btn:not(:disabled):hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        #exam-prev-btn {
+            background-color: #f3f4f6;
+            color: #4b5563;
+        }
+
+        #exam-next-btn, #exam-submit-btn {
+            background-color: #2563eb;
+            color: white;
+        }
+
+        #exam-submit-btn {
+            background-color: #059669;
+        }
+
+        .exam-header {
+            background: white;
+            padding: 1.5rem 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 1rem;
+            z-index: 10;
+        }
+
+        #exam-timer {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        .progress-container {
+            width: 100%;
+            background-color: #e5e7eb;
+            height: 8px;
+            border-radius: 999px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: #2563eb;
+            transition: width 0.3s ease;
+        }
+
+        .status.failed {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .question {
+                padding: 1.5rem;
+            }
+
+            .true-false-options {
+                flex-direction: column;
+            }
+
+            .true-false-options .option {
+                width: 100%;
+                min-width: unset;
+            }
+
+            .exam-controls {
+                flex-direction: column;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                border-radius: 12px 12px 0 0;
+                margin: 0;
+            }
+
+            .exam-btn {
+                width: 100%;
+            }
+
+            main {
+                padding-bottom: 200px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .question h4 {
+                font-size: 1.1rem;
+            }
+
+            .option {
+                padding: 1rem;
+                font-size: 1rem;
+            }
+
+            .exam-header {
+                padding: 1rem;
+            }
+
+            #exam-timer {
+                font-size: 1.1rem;
+            }
+        }
+
+        .explanation {
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: var(--background-color);
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+            font-style: italic;
+            color: var(--text-color);
+        }
+
+        .hint-container {
+            display: none;
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: #f8fafc;
+            border-radius: 8px;
+            border-left: 4px solid #2563eb;
+            color: #4b5563;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+    <main>
+        <section class="final-exam exam-section">
+            <div class="final-exam-container">
+                <div id="exam-content">
+                    <div class="exam-header">
+                        <div class="exam-info">
+                            <h3>Software Development EXAM</h3>
+                            <h3 id="exam-progress">Question 1 of 100</h3>
+                            <div id="exam-timer">Time Remaining: 120:00</div>
+                        </div>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="progress-bar"></div>
+                    </div>
+                    <div id="exam-question-container">
+                        <!-- Questions will be loaded here -->
+                    </div>
+                    <div class="exam-controls">
+                        <button id="exam-prev-btn" class="exam-btn" disabled>
+                            <i class="fas fa-arrow-left"></i> Previous
+                        </button>
+                        <button id="exam-next-btn" class="exam-btn">
+                            Next <i class="fas fa-arrow-right"></i>
+                        </button>
+                        <button id="exam-submit-btn" class="exam-btn" style="display: none;">
+                            Submit Exam <i class="fas fa-check"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Initialize exam state
+        let examState = {
+            questions: [],
+            currentQuestion: 0,
+            userAnswers: [],
+            timeRemaining: 120 * 60,
+            timerInterval: null,
+            isExamComplete: false
+        };
+
+        // Load questions from PDF
+        const pdfQuestions = [
+            {
+                type: 'multiple-choice',
+                question: "What is software development?",
+                options: [
+                    "The process of testing only",
+                    "The process of designing, creating, testing, and maintaining software",
+                    "Writing code without testing",
+                    "Using software without modification"
+                ],
+                correct: 1
+            },
+            {
+                type: 'multiple-choice',
+                question: "Which of the following is NOT a type of software?",
+                options: [
+                    "System Software",
+                    "Application Software",
+                    "Hardware Software",
+                    "Programming Software"
+                ],
+                correct: 2
+            },
+            // Add all 50 questions from the PDF here
+        ];
+
+        // Merge PDF questions with existing questions
+        const examQuestions = {
+            multipleChoice: [
+                // 1. Introduction to Software Development
+                {
+                    type: 'multiple-choice',
+                    question: "What is software development?",
+                    options: [
+                        "The process of testing only",
+                        "The process of designing, creating, testing, and maintaining software",
+                        "Writing code without testing",
+                        "Using software without modification"
+                    ],
+                    correct: 1
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "Which of the following is NOT a type of software?",
+                    options: [
+                        "System Software",
+                        "Application Software",
+                        "Hardware Software",
+                        "Programming Software"
+                    ],
+                    correct: 2
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "What does SDLC stand for?",
+                    options: [
+                        "Software Development Life Cycle",
+                        "System Deployment and Lifecycle",
+                        "Software Design and Learning Code",
+                        "System Development Learning Code"
+                    ],
+                    correct: 0
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "Which phase in software development involves writing actual code?",
+                    options: [
+                        "Requirement Analysis",
+                        "Design",
+                        "Implementation",
+                        "Testing"
+                    ],
+                    correct: 2
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "The final phase of the software development lifecycle is:",
+                    options: [
+                        "Design",
+                        "Maintenance",
+                        "Testing",
+                        "Deployment"
+                    ],
+                    correct: 1
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "What does the Testing phase primarily focus on?",
+                    options: [
+                        "Designing the software's UI",
+                        "Evaluating if the software functions correctly",
+                        "Marketing the software",
+                        "Writing user manuals"
+                    ],
+                    correct: 1
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "What is the purpose of the Deployment phase?",
+                    options: [
+                        "To remove all bugs from software",
+                        "To release the software for end-users",
+                        "To add additional features",
+                        "To rewrite the code from scratch"
+                    ],
+                    correct: 1
+                },
+                // 2. Evolution of Software Development
+                {
+                    type: 'multiple-choice',
+                    question: "The first digital programmable computer, Colossus, was developed in:",
+                    options: [
+                        "1943",
+                        "1951",
+                        "1960",
+                        "1972"
+                    ],
+                    correct: 0
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "The first high-level programming language was:",
+                    options: [
+                        "Python",
+                        "Java",
+                        "Fortran",
+                        "C"
+                    ],
+                    correct: 2
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "The World Wide Web was created by Tim Berners-Lee in:",
+                    options: [
+                        "1984",
+                        "1991",
+                        "2001",
+                        "2010"
+                    ],
+                    correct: 1
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "What major technology trend emerged in the 2000s?",
+                    options: [
+                        "The rise of quantum computing",
+                        "The introduction of high-level programming languages",
+                        "The spread of personal computing",
+                        "The development of mobile apps and smartphones"
+                    ],
+                    correct: 3
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "Which programming language was introduced in 1995 and became a key language for web development?",
+                    options: [
+                        "JavaScript",
+                        "C++",
+                        "Python",
+                        "Ruby"
+                    ],
+                    correct: 0
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "What was the main purpose of early software in the 1940s and 1950s?",
+                    options: [
+                        "Entertainment",
+                        "Business automation",
+                        "Military and scientific calculations",
+                        "Social networking"
+                    ],
+                    correct: 2
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "Which programming language revolutionized system development in 1972?",
+                    options: [
+                        "Java",
+                        "C",
+                        "Python",
+                        "Swift"
+                    ],
+                    correct: 1
+                },
+                // 3. Types of Software Development
+                {
+                    type: 'multiple-choice',
+                    question: "Which type of software development involves creating software for Windows, macOS, and Linux computers?",
+                    options: [
+                        "Web Development",
+                        "Mobile App Development",
+                        "Desktop Application Development",
+                        "Embedded Systems Development"
+                    ],
+                    correct: 2
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "Which type of software development focuses on web applications?",
+                    options: [
+                        "Cloud Computing",
+                        "Web Development",
+                        "Blockchain Development",
+                        "Cybersecurity"
+                    ],
+                    correct: 1
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "What is the main purpose of DevOps?",
+                    options: [
+                        "Security Testing",
+                        "Collaboration between development and operations",
+                        "Only writing code",
+                        "Running applications"
+                    ],
+                    correct: 1
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "Which programming language is widely used for mobile app development on Android?",
+                    options: [
+                        "Swift",
+                        "Objective-C",
+                        "Java",
+                        "C#"
+                    ],
+                    correct: 2
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "Which software development type focuses on embedded devices like microcontrollers?",
+                    options: [
+                        "Web Development",
+                        "Game Development",
+                        "Embedded Systems Development",
+                        "Cloud Computing"
+                    ],
+                    correct: 2
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "TensorFlow and PyTorch are commonly used in:",
+                    options: [
+                        "Web development",
+                        "Mobile application development",
+                        "Artificial Intelligence and Machine Learning",
+                        "Game development"
+                    ],
+                    correct: 2
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "What is the main focus of Cybersecurity Development?",
+                    options: [
+                        "Creating AI-powered applications",
+                        "Designing visually appealing websites",
+                        "Protecting software from cyber threats",
+                        "Developing cloud storage services"
+                    ],
+                    correct: 2
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "Which of the following is an example of a cloud computing service?",
+                    options: [
+                        "Adobe Photoshop",
+                        "Google Cloud Platform",
+                        "Microsoft Excel",
+                        "Unity Game Engine"
+                    ],
+                    correct: 1
+                },
+                // 4. Software Development Careers
+                {
+                    type: 'multiple-choice',
+                    question: "Which role is responsible for writing and developing software applications?",
+                    options: [
+                        "Quality Assurance Engineer",
+                        "Software Developer",
+                        "Product Manager",
+                        "Cybersecurity Analyst"
+                    ],
+                    correct: 1
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "A front-end developer mainly works on:",
+                    options: [
+                        "Server-side programming",
+                        "Database management",
+                        "User interface and experience",
+                        "Operating system design"
+                    ],
+                    correct: 2
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "A back-end developer focuses on:",
+                    options: [
+                        "User interface design",
+                        "Server-side logic and database management",
+                        "Social media marketing",
+                        "Creating mobile applications"
+                    ],
+                    correct: 1
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "Which job role is responsible for overseeing the entire software development process, from gathering requirements to deployment?",
+                    options: [
+                        "Software Developer",
+                        "Product Manager",
+                        "Cybersecurity Analyst",
+                        "Quality Assurance Engineer"
+                    ],
+                    correct: 1
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "Who is responsible for ensuring the security of software systems?",
+                    options: [
+                        "Front-End Developer",
+                        "Cybersecurity Analyst",
+                        "DevOps Engineer",
+                        "Data Scientist"
+                    ],
+                    correct: 1
+                },
+                // 5. General Software Knowledge
+                {
+                    type: 'multiple-choice',
+                    question: "What is the main goal of quality assurance in software development?",
+                    options: [
+                        "Ensuring that software meets quality standards and is free from bugs",
+                        "Writing new code",
+                        "Marketing the product",
+                        "Releasing updates"
+                    ],
+                    correct: 0
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "Which of the following is an example of Application Software?",
+                    options: [
+                        "Windows OS",
+                        "Microsoft Word",
+                        "BIOS",
+                        "Compiler"
+                    ],
+                    correct: 1
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "What is the key advantage of Cloud Computing?",
+                    options: [
+                        "Running applications on a single device only",
+                        "Storing and accessing data over the internet",
+                        "Developing only mobile applications",
+                        "Replacing cybersecurity measures"
+                    ],
+                    correct: 1
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "What is the role of documentation in software development?",
+                    options: [
+                        "Keeping track of software bugs only",
+                        "Providing user manuals and technical documentation",
+                        "Writing promotional material",
+                        "Designing UI components"
+                    ],
+                    correct: 1
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "What is the main function of system software?",
+                    options: [
+                        "Creating business reports",
+                        "Managing hardware and system resources",
+                        "Designing websites",
+                        "Editing photos"
+                    ],
+                    correct: 1
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "What is the primary role of a compiler in programming?",
+                    options: [
+                        "To execute the program directly",
+                        "To convert high-level code into machine code",
+                        "To create databases",
+                        "To design user interfaces"
+                    ],
+                    correct: 1
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "Which of the following is NOT an example of system software?",
+                    options: [
+                        "Microsoft Windows",
+                        "macOS",
+                        "Google Chrome",
+                        "Linux Kernel"
+                    ],
+                    correct: 2
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "Open-source software refers to software that:",
+                    options: [
+                        "Cannot be modified by users",
+                        "Is publicly available and can be modified",
+                        "Is only used for businesses",
+                        "Is closed for public use"
+                    ],
+                    correct: 1
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "Which of the following programming languages is NOT commonly used in web development?",
+                    options: [
+                        "HTML",
+                        "JavaScript",
+                        "Python",
+                        "C"
+                    ],
+                    correct: 3
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "What is the main advantage of using object-oriented programming (OOP)?",
+                    options: [
+                        "It does not support code reusability",
+                        "It focuses on objects and classes to structure code",
+                        "It is only used for AI and Machine Learning",
+                        "It prevents the use of variables"
+                    ],
+                    correct: 1
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "Which software development model follows a linear approach where each phase must be completed before the next begins?",
+                    options: [
+                        "Agile",
+                        "Waterfall",
+                        "DevOps",
+                        "Prototype"
+                    ],
+                    correct: 1
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "The Agile methodology is best known for:",
+                    options: [
+                        "Strictly following a linear sequence",
+                        "Encouraging flexibility and continuous improvements",
+                        "Avoiding customer feedback",
+                        "Using only one programming language"
+                    ],
+                    correct: 1
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "In database management, SQL is primarily used for:",
+                    options: [
+                        "Writing front-end applications",
+                        "Managing and querying databases",
+                        "Creating operating systems",
+                        "Designing game engines"
+                    ],
+                    correct: 1
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "What is an algorithm in software development?",
+                    options: [
+                        "A type of computer virus",
+                        "A process or set of rules to solve a problem",
+                        "A specific type of software framework",
+                        "A hardware component"
+                    ],
+                    correct: 1
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "Which of the following is NOT considered a testing method in software development?",
+                    options: [
+                        "Unit Testing",
+                        "Integration Testing",
+                        "System Testing",
+                        "Algorithm Execution"
+                    ],
+                    correct: 3
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "Machine learning is a subset of:",
+                    options: [
+                        "Cloud Computing",
+                        "Artificial Intelligence",
+                        "Cybersecurity",
+                        "Embedded Systems"
+                    ],
+                    correct: 1
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "In game development, which engine is widely used for creating both 2D and 3D games?",
+                    options: [
+                        "TensorFlow",
+                        "Unity",
+                        "Kubernetes",
+                        "Jenkins"
+                    ],
+                    correct: 1
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "What is the primary function of blockchain technology?",
+                    options: [
+                        "Centralized data storage",
+                        "Encrypting files for cybersecurity",
+                        "Creating decentralized and secure digital transactions",
+                        "Developing mobile applications"
+                    ],
+                    correct: 2
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "A bug in software development refers to:",
+                    options: [
+                        "A feature of a program",
+                        "An error or flaw in the software",
+                        "A testing method",
+                        "A security measure"
+                    ],
+                    correct: 1
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "Which software development approach allows developers to continuously integrate and deliver code updates?",
+                    options: [
+                        "Waterfall",
+                        "DevOps",
+                        "Prototype Model",
+                        "Incremental Model"
+                    ],
+                    correct: 1
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "Cloud-based storage services, such as Google Drive and Dropbox, allow users to:",
+                    options: [
+                        "Store and access files remotely via the internet",
+                        "Install software without an internet connection",
+                        "Use only offline applications",
+                        "Store data on local devices only"
+                    ],
+                    correct: 0
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "Which of the following is NOT a programming language?",
+                    options: [
+                        "Java",
+                        "Python",
+                        "Linux",
+                        "C++"
+                    ],
+                    correct: 2
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "What is the purpose of version control systems like Git?",
+                    options: [
+                        "To develop front-end applications",
+                        "To track and manage changes in source code",
+                        "To optimize network security",
+                        "To replace traditional programming languages"
+                    ],
+                    correct: 1
+                }
+            ],
+            identification: [
+                {
+                    type: 'identification',
+                    question: "The process of designing, creating, testing, and maintaining software.",
+                    answer: "SOFTWARE DEVELOPMENT",
+                    hint: "This is the fundamental process of creating computer programs."
+                },
+                {
+                    type: 'identification',
+                    question: "The phase in software development that involves understanding the project's needs and objectives.",
+                    answer: "REQUIREMENTS ANALYSIS",
+                    hint: "This is the first phase where we gather and analyze what the software needs to do."
+                },
+                {
+                    type: 'identification',
+                    question: "The type of software that provides basic functionality to a computer and allows other software to run smoothly.",
+                    answer: "SYSTEM SOFTWARE",
+                    hint: "This includes operating systems and device drivers."
+                },
+                {
+                    type: 'identification',
+                    question: "The phase where the actual code of a software project is written.",
+                    answer: "IMPLEMENTATION",
+                    hint: "This is when programmers write the actual code based on the design specifications."
+                },
+                {
+                    type: 'identification',
+                    question: "The first high-level programming language developed in the 1950s.",
+                    answer: "FORTRAN",
+                    hint: "This language was primarily used for scientific and engineering calculations."
+                },
+                {
+                    type: 'identification',
+                    question: "The phase that ensures a software product meets all client and system requirements before deployment.",
+                    answer: "TESTING",
+                    hint: "This phase involves finding and fixing bugs and verifying functionality."
+                },
+                {
+                    type: 'identification',
+                    question: "The final phase of the software development lifecycle, which involves fixing bugs and updating the software.",
+                    answer: "MAINTENANCE",
+                    hint: "This phase occurs after the software is deployed and continues throughout its lifetime."
+                },
+                {
+                    type: 'identification',
+                    question: "The first programmable digital computer, developed in 1943.",
+                    answer: "COLOSSUS",
+                    hint: "This computer was used during World War II for code-breaking."
+                },
+                {
+                    type: 'identification',
+                    question: "The worldwide network of interconnected computers, introduced in the early 1990s.",
+                    answer: "WORLD WIDE WEB",
+                    hint: "Created by Tim Berners-Lee, it revolutionized information sharing."
+                },
+                {
+                    type: 'identification',
+                    question: "The software development methodology that focuses on flexibility, collaboration, and continuous improvements.",
+                    answer: "AGILE",
+                    hint: "This methodology emphasizes iterative development and customer feedback."
+                },
+                {
+                    type: 'identification',
+                    question: "The software development model that follows a linear step-by-step approach.",
+                    answer: "WATERFALL",
+                    hint: "Each phase must be completed before moving to the next."
+                },
+                {
+                    type: 'identification',
+                    question: "The process of writing and maintaining the detailed records of a software project, including technical manuals and user guides.",
+                    answer: "DOCUMENTATION",
+                    hint: "This helps users and developers understand how the software works."
+                },
+                {
+                    type: 'identification',
+                    question: "A professional responsible for writing and developing applications according to project requirements.",
+                    answer: "SOFTWARE DEVELOPER",
+                    hint: "This person turns designs into working software."
+                },
+                {
+                    type: 'identification',
+                    question: "The type of software development that focuses on building applications for smartphones and tablets.",
+                    answer: "MOBILE DEVELOPMENT",
+                    hint: "This includes creating apps for iOS and Android devices."
+                },
+                {
+                    type: 'identification',
+                    question: "The job role responsible for managing databases and server-side functionality.",
+                    answer: "BACK-END DEVELOPER",
+                    hint: "This person works with servers, databases, and application logic."
+                },
+                {
+                    type: 'identification',
+                    question: "The widely used software development methodology that promotes continuous integration and deployment.",
+                    answer: "DEVOPS",
+                    hint: "This combines development and operations practices."
+                },
+                {
+                    type: 'identification',
+                    question: "The process of converting high-level programming code into machine code.",
+                    answer: "COMPILATION",
+                    hint: "This transforms human-readable code into computer-executable instructions."
+                },
+                {
+                    type: 'identification',
+                    question: "A type of software that allows users to complete specific tasks, such as word processing or video editing.",
+                    answer: "APPLICATION SOFTWARE",
+                    hint: "This type of software is designed for end-users to perform specific tasks."
+                },
+                {
+                    type: 'identification',
+                    question: "The most popular programming language used for artificial intelligence and machine learning.",
+                    answer: "PYTHON",
+                    hint: "This language is known for its extensive libraries like TensorFlow and PyTorch."
+                },
+                {
+                    type: 'identification',
+                    question: "The web programming language introduced in 1995, commonly used for interactive front-end development.",
+                    answer: "JAVASCRIPT",
+                    hint: "This language enables interactive web pages and is essential for front-end development."
+                },
+                {
+                    type: 'identification',
+                    question: "The global platform that allows users to store and access data remotely over the internet.",
+                    answer: "CLOUD COMPUTING",
+                    hint: "Services like AWS, Google Cloud, and Azure are examples."
+                },
+                {
+                    type: 'identification',
+                    question: "A security professional responsible for protecting software and systems against cyber threats.",
+                    answer: "CYBERSECURITY ANALYST",
+                    hint: "This role focuses on identifying and preventing security vulnerabilities."
+                },
+                {
+                    type: 'identification',
+                    question: "The widely used game development engine for creating both 2D and 3D games.",
+                    answer: "UNITY",
+                    hint: "This engine is popular for its cross-platform development capabilities."
+                },
+                {
+                    type: 'identification',
+                    question: "A software development approach that involves creating intelligent models capable of decision-making and automation.",
+                    answer: "ARTIFICIAL INTELLIGENCE",
+                    hint: "This field includes machine learning and neural networks."
+                },
+                {
+                    type: 'identification',
+                    question: "A system used to track changes in source code, often used in collaborative software development projects.",
+                    answer: "VERSION CONTROL",
+                    hint: "Git is a popular example of this type of system."
+                },
+                {
+                    type: 'identification',
+                    question: "The technology behind Bitcoin and other decentralized digital currencies.",
+                    answer: "BLOCKCHAIN",
+                    hint: "This is a distributed ledger technology."
+                },
+                {
+                    type: 'identification',
+                    question: "A software testing method that checks individual components or functions of a program.",
+                    answer: "UNIT TESTING",
+                    hint: "This is the most basic level of testing in software development."
+                },
+                {
+                    type: 'identification',
+                    question: "A collection of predefined code that developers can use to build applications faster.",
+                    answer: "FRAMEWORK",
+                    hint: "Examples include React, Angular, and Django."
+                },
+                {
+                    type: 'identification',
+                    question: "A type of development that involves creating software for embedded devices, such as microcontrollers.",
+                    answer: "EMBEDDED SYSTEMS DEVELOPMENT",
+                    hint: "This involves programming hardware devices with specific functions."
+                },
+                {
+                    type: 'identification',
+                    question: "A software development career that focuses on optimizing and securing systems to prevent cyber-attacks.",
+                    answer: "CYBERSECURITY ENGINEER",
+                    hint: "This role involves implementing security measures and protecting against threats."
+                }
+            ],
+            trueFalse: [
+                {
+                    type: 'true-false',
+                    question: "The implementation phase in software development involves writing actual code.",
+                    answer: true,
+                    explanation: "The implementation phase is indeed where developers write the actual code based on the design specifications."
+                },
+                {
+                    type: 'true-false',
+                    question: "System software is designed specifically for end-users to perform tasks like word processing and gaming.",
+                    answer: false,
+                    explanation: "System software is designed to provide basic functionality to a computer and allow other software to run. Application software is designed for end-users to perform specific tasks."
+                },
+                {
+                    type: 'true-false',
+                    question: "The Agile methodology follows a strict linear process without room for changes.",
+                    answer: false,
+                    explanation: "Agile methodology is known for its flexibility and iterative approach, allowing for continuous changes and improvements throughout the development process."
+                },
+                {
+                    type: 'true-false',
+                    question: "The first programmable digital computer, Colossus, was developed in the 1940s.",
+                    answer: true,
+                    explanation: "Colossus was indeed developed in 1943, during World War II, making it the first programmable digital computer."
+                },
+                {
+                    type: 'true-false',
+                    question: "JavaScript is primarily used for back-end server programming only.",
+                    answer: false,
+                    explanation: "JavaScript is primarily used for front-end development and client-side scripting, though it can also be used for back-end development with Node.js."
+                },
+                {
+                    type: 'true-false',
+                    question: "The Waterfall Model allows developers to go back and modify previous phases at any time.",
+                    answer: false,
+                    explanation: "The Waterfall Model follows a linear approach where each phase must be completed before moving to the next, with limited ability to go back to previous phases."
+                },
+                {
+                    type: 'true-false',
+                    question: "Mobile application development includes creating apps for smartphones and tablets.",
+                    answer: true,
+                    explanation: "Mobile development specifically focuses on creating applications for mobile devices like smartphones and tablets."
+                },
+                {
+                    type: 'true-false',
+                    question: "Cloud computing enables users to store and access data remotely over the internet.",
+                    answer: true,
+                    explanation: "Cloud computing allows users to store, manage, and access data and applications over the internet instead of on local devices."
+                },
+                {
+                    type: 'true-false',
+                    question: "The debugging process involves intentionally adding errors to a program to test its functionality.",
+                    answer: false,
+                    explanation: "Debugging is the process of finding and fixing errors in a program, not adding them. Adding errors intentionally would be part of testing, not debugging."
+                },
+                {
+                    type: 'true-false',
+                    question: "Blockchain technology is used to create decentralized and secure digital transactions.",
+                    answer: true,
+                    explanation: "Blockchain technology is specifically designed to create secure, decentralized digital transactions and record-keeping."
+                },
+                {
+                    type: 'true-false',
+                    question: "Artificial intelligence (AI) is mainly used for web development and database management.",
+                    answer: false,
+                    explanation: "AI is used across various fields including machine learning, robotics, natural language processing, and automation, not just web development and database management."
+                },
+                {
+                    type: 'true-false',
+                    question: "The product manager in a software project is responsible for overseeing the entire development process.",
+                    answer: true,
+                    explanation: "Product managers are responsible for overseeing the entire software development process, from gathering requirements to deployment."
+                },
+                {
+                    type: 'true-false',
+                    question: "A bug in software development refers to an error or flaw in the program.",
+                    answer: true,
+                    explanation: "A bug is indeed an error or flaw in a program that causes it to behave unexpectedly or incorrectly."
+                },
+                {
+                    type: 'true-false',
+                    question: "The testing phase is not necessary if developers carefully write their code.",
+                    answer: false,
+                    explanation: "Testing is always necessary, regardless of how carefully code is written, as it helps identify issues that might not be apparent during development."
+                },
+                {
+                    type: 'true-false',
+                    question: "Cybersecurity development focuses on protecting software and systems from cyber threats.",
+                    answer: true,
+                    explanation: "Cybersecurity development specifically focuses on creating secure systems and protecting them from various cyber threats."
+                },
+                {
+                    type: 'true-false',
+                    question: "The first high-level programming language was Python, introduced in the 1950s.",
+                    answer: false,
+                    explanation: "The first high-level programming language was FORTRAN, introduced in the 1950s. Python was developed much later in the 1990s."
+                },
+                {
+                    type: 'true-false',
+                    question: "The DevOps approach emphasizes collaboration between software development and IT operations.",
+                    answer: true,
+                    explanation: "DevOps is specifically about fostering collaboration between development and operations teams to improve the software development process."
+                },
+                {
+                    type: 'true-false',
+                    question: "SQL is primarily used for managing and querying databases.",
+                    answer: true,
+                    explanation: "SQL (Structured Query Language) is specifically designed for managing and querying relational databases."
+                },
+                {
+                    type: 'true-false',
+                    question: "Machine learning is a subset of artificial intelligence.",
+                    answer: true,
+                    explanation: "Machine learning is indeed a subset of artificial intelligence that focuses on building systems that can learn from and make decisions based on data."
+                },
+                {
+                    type: 'true-false',
+                    question: "Version control systems like Git help track changes in source code and allow multiple developers to collaborate efficiently.",
+                    answer: true,
+                    explanation: "Version control systems like Git are specifically designed to track changes in source code and enable collaborative development."
+                }
+            ]
+        };
+
+        function initializeExam() {
+            try {
+                // Make sure we have enough questions
+                if (examQuestions.multipleChoice.length < 50) {
+                    throw new Error('Not enough multiple choice questions');
+                }
+                if (examQuestions.identification.length < 30) {
+                    throw new Error('Not enough identification questions');
+                }
+                if (examQuestions.trueFalse.length < 20) {
+                    throw new Error('Not enough true/false questions');
+                }
+
+                // Select exactly 60 MC, 20 ID, and 20 T/F questions
+                const selectedMC = shuffleArray(examQuestions.multipleChoice).slice(0, 50);
+                const selectedID = shuffleArray(examQuestions.identification).slice(0, 30);
+                const selectedTF = shuffleArray(examQuestions.trueFalse).slice(0, 20);
+
+                // Combine and shuffle all questions
+                examState.questions = shuffleArray([...selectedMC, ...selectedID, ...selectedTF]);
+                
+                // Verify we have exactly 100 questions
+                if (examState.questions.length !== 100) {
+                    throw new Error('Incorrect number of questions selected');
+                }
+
+                examState.userAnswers = new Array(examState.questions.length).fill(null);
+                
+                // Start timer
+                startTimer();
+                
+                // Display first question
+                displayQuestion();
+
+                // Set up event listeners
+                document.getElementById('exam-prev-btn').addEventListener('click', previousQuestion);
+                document.getElementById('exam-next-btn').addEventListener('click', nextQuestion);
+                document.getElementById('exam-submit-btn').addEventListener('click', submitExam);
+
+                // Add keyboard navigation
+                document.addEventListener('keydown', handleKeyPress);
+
+                console.log('Exam initialized with:', {
+                    totalQuestions: examState.questions.length,
+                    multipleChoice: selectedMC.length,
+                    identification: selectedID.length,
+                    trueFalse: selectedTF.length
+                });
+            } catch (error) {
+                console.error('Error initializing exam:', error);
+                alert('There was an error loading the exam questions. Please try again. Error: ' + error.message);
+            }
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'ArrowLeft' && !document.getElementById('exam-prev-btn').disabled) {
+                previousQuestion();
+            } else if (event.key === 'ArrowRight' && document.getElementById('exam-next-btn').style.display !== 'none') {
+                nextQuestion();
+            }
+        }
+
+        function displayQuestion() {
+            const question = examState.questions[examState.currentQuestion];
+            const container = document.getElementById('exam-question-container');
+
+            // Update progress
+            document.getElementById('exam-progress').textContent = 
+                `Question ${examState.currentQuestion + 1} of ${examState.questions.length}`;
+
+            let html = `
+                <div class="question">
+                    <div class="question-type">
+                        ${question.type === 'multiple-choice' ? 'Multiple Choice' : 
+                          question.type === 'identification' ? 'Identification' : 'True or False'}
+                    </div>
+                    <h4>${question.question}</h4>
+            `;
+
+            if (question.type === 'multiple-choice') {
+                html += '<div class="options">';
+                question.options.forEach((option, index) => {
+                    const isSelected = examState.userAnswers[examState.currentQuestion] === index;
+                    const letter = String.fromCharCode(65 + index);
+                    html += `
+                        <div class="option ${isSelected ? 'selected' : ''}" 
+                             onclick="selectOption(${index})">
+                            <span class="option-letter">${letter}</span> ${option}
+                        </div>
+                    `;
+                });
+                html += '</div>';
+            } else if (question.type === 'identification') {
+                const userAnswer = examState.userAnswers[examState.currentQuestion] || '';
+                html += `
+                    <input type="text" 
+                           class="identification-input"
+                           placeholder="Type your answer here..."
+                           value="${userAnswer}"
+                           onchange="updateIdentificationAnswer(event)">
+                    <button class="hint-btn" onclick="toggleHint()">
+                        <i class="fas fa-lightbulb"></i> Show Hint
+                    </button>
+                    <div class="hint-container" style="display: none;">
+                        <i class="fas fa-lightbulb"></i> ${question.hint}
+                    </div>
+                `;
+            } else { // True/False
+                html += '<div class="options true-false-options">';
+                ['True', 'False'].forEach((option, index) => {
+                    const isSelected = examState.userAnswers[examState.currentQuestion] === (index === 0);
+                    html += `
+                        <div class="option ${isSelected ? 'selected' : ''}" 
+                             onclick="selectTrueFalse(${index === 0})">
+                            ${option}
+                        </div>
+                    `;
+                });
+                html += '</div>';
+            }
+
+            html += '</div>';
+            container.innerHTML = html;
+
+            // Focus on input for identification questions
+            if (question.type === 'identification') {
+                container.querySelector('.identification-input')?.focus();
+            }
+
+            updateControls();
+            updateProgress();
+        }
+
+        function selectOption(index) {
+            examState.userAnswers[examState.currentQuestion] = index;
+            displayQuestion();
+        }
+
+        function updateIdentificationAnswer(event) {
+            examState.userAnswers[examState.currentQuestion] = event.target.value.trim().toUpperCase();
+        }
+
+        function selectTrueFalse(value) {
+            examState.userAnswers[examState.currentQuestion] = value;
+            displayQuestion();
+        }
+
+        function toggleHint() {
+            const hintContainer = document.querySelector('.hint-container');
+            const hintBtn = document.querySelector('.hint-btn');
+            if (hintContainer.style.display === 'block') {
+                hintContainer.style.display = 'none';
+                hintBtn.innerHTML = '<i class="fas fa-lightbulb"></i> Show Hint';
+            } else {
+                hintContainer.style.display = 'block';
+                hintBtn.innerHTML = '<i class="fas fa-lightbulb"></i> Hide Hint';
+            }
+        }
+
+        function updateControls() {
+            const prevBtn = document.getElementById('exam-prev-btn');
+            const nextBtn = document.getElementById('exam-next-btn');
+            const submitBtn = document.getElementById('exam-submit-btn');
+
+            prevBtn.disabled = examState.currentQuestion === 0;
+            
+            if (examState.currentQuestion === examState.questions.length - 1) {
+                nextBtn.style.display = 'none';
+                submitBtn.style.display = 'block';
+            } else {
+                nextBtn.style.display = 'block';
+                submitBtn.style.display = 'none';
+            }
+        }
+
+        function startTimer() {
+            const timerDisplay = document.getElementById('exam-timer');
+            examState.timerInterval = setInterval(() => {
+                examState.timeRemaining--;
+                const minutes = Math.floor(examState.timeRemaining / 60);
+                const seconds = examState.timeRemaining % 60;
+                timerDisplay.textContent = `Time Remaining: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+                if (examState.timeRemaining <= 0) {
+                    clearInterval(examState.timerInterval);
+                    submitExam(true);
+                }
+            }, 1000);
+        }
+
+        function previousQuestion() {
+            if (examState.currentQuestion > 0) {
+                examState.currentQuestion--;
+                displayQuestion();
+            }
+        }
+
+        function nextQuestion() {
+            if (examState.currentQuestion < examState.questions.length - 1) {
+                examState.currentQuestion++;
+                displayQuestion();
+            }
+        }
+
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        function submitExam(isTimeout = false) {
+            clearInterval(examState.timerInterval);
+            examState.isExamComplete = true;
+            
+            let score = 0;
+            const results = examState.questions.map((question, index) => {
+                const userAnswer = examState.userAnswers[index];
+                let isCorrect = false;
+                
+                if (question.type === 'multiple-choice') {
+                    isCorrect = userAnswer === question.correct;
+                } else if (question.type === 'identification') {
+                    isCorrect = userAnswer && userAnswer.toUpperCase() === question.answer.toUpperCase();
+                } else { // true-false
+                    isCorrect = userAnswer === question.answer;
+                }
+                
+                if (isCorrect) score++;
+                
+                return {
+                    question,
+                    userAnswer,
+                    isCorrect
+                };
+            });
+
+            const percentage = Math.round((score / examState.questions.length) * 100);
+            const passed = percentage >= 75;
+
+            const container = document.getElementById('exam-question-container');
+            container.innerHTML = `
+                <div class="result-container">
+                    <h2>${isTimeout ? 'Time\'s Up!' : 'Exam Complete'}</h2>
+                    <div class="score">${percentage}%</div>
+                    <div class="pass-fail ${passed ? 'pass' : 'fail'}">
+                        ${passed ? 'PASSED' : 'FAILED'}
+                    </div>
+                    <p>You got ${score} out of ${examState.questions.length} questions correct.</p>
+                    <button class="exam-btn" onclick="showReview()">
+                        <i class="fas fa-search"></i> Review Answers
+                    </button>
+                </div>
+            `;
+
+            document.querySelector('.exam-controls').style.display = 'none';
+            
+            // Save results to localStorage
+            localStorage.setItem('examResults', JSON.stringify({
+                score: percentage,
+                passed,
+                timeSpent: 7200 - examState.timeRemaining,
+                date: new Date().toISOString(),
+                results
+            }));
+        }
+
+        function showReview() {
+            const results = JSON.parse(localStorage.getItem('examResults')).results;
+            const container = document.getElementById('exam-question-container');
+            
+            let html = '<div class="review-container">';
+            
+            results.forEach((result, index) => {
+                const { question, userAnswer, isCorrect } = result;
+                
+                html += `
+                    <div class="review-item ${isCorrect ? 'correct' : 'incorrect'}">
+                        <div class="question-type">
+                            ${question.type === 'multiple-choice' ? 'Multiple Choice' : 
+                              question.type === 'identification' ? 'Identification' : 'True or False'}
+                        </div>
+                        <h4>Question ${index + 1}: ${question.question}</h4>
+                `;
+
+                if (question.type === 'multiple-choice') {
+                    html += '<div class="answer-status">';
+                    html += `Your Answer: <span class="${isCorrect ? 'correct-answer' : 'incorrect-answer'}">
+                        ${userAnswer !== null ? question.options[userAnswer] : 'No answer'}</span><br>`;
+                    if (!isCorrect) {
+                        html += `Correct Answer: <span class="correct-answer">
+                            ${question.options[question.correct]}</span>`;
+                    }
+                    html += '</div>';
+                } else if (question.type === 'identification') {
+                    html += '<div class="answer-status">';
+                    html += `Your Answer: <span class="${isCorrect ? 'correct-answer' : 'incorrect-answer'}">
+                        ${userAnswer || 'No answer'}</span><br>`;
+                    if (!isCorrect) {
+                        html += `Correct Answer: <span class="correct-answer">${question.answer}</span>`;
+                    }
+                    html += '</div>';
+                    if (question.hint) {
+                        html += `<div class="explanation">Hint: ${question.hint}</div>`;
+                    }
+                } else { // true-false
+                    html += '<div class="answer-status">';
+                    html += `Your Answer: <span class="${isCorrect ? 'correct-answer' : 'incorrect-answer'}">
+                        ${userAnswer === null ? 'No answer' : userAnswer ? 'True' : 'False'}</span><br>`;
+                    if (!isCorrect) {
+                        html += `Correct Answer: <span class="correct-answer">
+                            ${question.answer ? 'True' : 'False'}</span>`;
+                    }
+                    html += '</div>';
+                    if (question.explanation) {
+                        html += `<div class="explanation">${question.explanation}</div>`;
+                    }
+                }
+
+                html += '</div>';
+            });
+
+            html += `
+                <button class="exam-btn" onclick="window.location.href='index.html'" style="margin-top: 2rem;">
+                    <i class="fas fa-home"></i> Return to Home
+                </button>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        function updateProgress() {
+            const progress = ((examState.currentQuestion + 1) / examState.questions.length) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+        }
+
+        // Initialize exam when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                initializeExam();
+                // Display student info if available
+                const studentName = localStorage.getItem('studentName');
+                const studentId = localStorage.getItem('studentId');
+                if (studentName && studentId) {
+                    document.getElementById('studentName').textContent = studentName;
+                    document.getElementById('studentId').textContent = `ID: ${studentId}`;
+                }
+            } catch (error) {
+                console.error('Error initializing exam:', error);
+                alert('There was an error loading the exam questions. Please refresh the page.');
+            }
+        });
+    </script>
+</body>
+</html>
